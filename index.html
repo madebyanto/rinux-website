@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rinux is a free, open-source monolithic modular kernel written in Rust.">
+    <meta name="color-scheme" content="light dark">
+    <title>Rinux</title>
+    <link rel="icon" type="image/png" href="Rinux.png">
+    <link rel="apple-touch-icon" href="Rinux.png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('rinux-theme');
+          if (t === 'light' || t === 'dark') {
+            document.documentElement.setAttribute('data-theme', t);
+          }
+        } catch (e) {}
+      })();
+    </script>
+</head>
+<body>
+
+<div class="theme-switch" role="group" aria-label="Color theme">
+  <button type="button" data-theme-value="light">Light</button>
+  <button type="button" data-theme-value="dark">Dark</button>
+  <button type="button" data-theme-value="system">System</button>
+</div>
+
+<div class="header">
+  <a class="logo" href="Rinux.png" title="Rinux logo">
+    <img src="Rinux.png" width="459" height="544" alt="Rinux logo: a penguin wearing the Rust logo on its belly, a Unix-like twin of Tux. Original Linux Tux artwork by Larry Ewing, made with The GIMP.">
+  </a>
+  <div class="header-text">
+    <h1>Rinux</h1>
+    <p class="tagline">A Unix-like monolithic modular kernel written in Rust.</p>
+  </div>
+</div>
+
+<ul class="menu">
+  <li><a href="#about">About</a></li>
+  <li><a href="#build">Build</a></li>
+  <li><a href="#faq">FAQ</a></li>
+  <li><a href="#resources">Resources</a></li>
+  <li><a href="#contribute">Contribute</a></li>
+</ul>
+
+<hr>
+
+<h2 id="top">Welcome to the Rinux kernel!</h2>
+
+<p>
+Rinux is an open-source free monolithic modular kernel written in Rust.
+The goal is to make the <em>"twin of Linux"</em> with the same architecture,
+concepts, functions and performance.
+</p>
+
+<p>
+Rinux is actually in active development, you can contribute/check on our
+<a href="https://github.com/madebyanto/rinux">GitHub repository</a>.
+</p>
+
+<p class="center">
+<a href="https://github.com/madebyanto/rinux"><strong>Download / Source code</strong></a>
+&nbsp;|&nbsp;
+<a href="#build">Build instructions</a>
+&nbsp;|&nbsp;
+<a href="https://github.com/madebyanto/rinux/blob/main/LICENSE">License (GPL-2.0)</a>
+</p>
+
+<hr>
+
+<h2 id="about">About</h2>
+
+<p>
+Rinux is a hobby operating system kernel written in Rust. It aims to be a twin of
+Linux in design, and follows the same core directions:
+</p>
+
+<ul>
+  <li><b>Monolithic</b> kernel, with a modular structure;</li>
+  <li><b>UNIX semantics</b>, with a separation between kernel and user space;</li>
+  <li><b>"Everything is a file"</b> philosophy;</li>
+  <li>Written <b>from scratch</b> in Rust, without shortcuts.</li>
+</ul>
+
+<p>
+Everything is built layer by layer: boot, memory management, the heap. The source
+is public and meant to be studied as much as it is meant to run. Rinux does not
+aim to be a distribution &mdash; it is the kernel, and nothing more.
+</p>
+
+<hr>
+
+<h2 id="build">Build &amp; run in QEMU (hardware soon)</h2>
+
+<p><b>1. Requirements</b></p>
+
+<p>
+A Rust nightly toolchain (pinned by <code>rust-toolchain.toml</code>), plus
+<code>grub-mkrescue</code>, <code>xorriso</code> and QEMU.
+</p>
+
+<pre><code>$ sudo pacman -S qemu-full grub xorriso
+$ rustup toolchain install nightly
+$ rustup component add rust-src llvm-tools --toolchain nightly</code></pre>
+
+<p><b>2. Compile</b></p>
+
+<pre><code>$ git clone https://github.com/madebyanto/rinux.git
+$ cd rinux
+$ cargo build</code></pre>
+
+<p><b>3. Make an image and boot</b></p>
+
+<pre><code>$ make image    # build the ISO with grub-mkrescue
+$ make run      # boot it in QEMU
+
+# or both at once:
+$ bash build.sh</code></pre>
+
+<p class="small">
+Note: Rinux is meant to run in a virtual machine while in development. It boots on
+bare metal, but use a disposable machine if you try.
+</p>
+
+<hr>
+
+<h2 id="faq">FAQ</h2>
+
+<dl class="faq">
+
+<dt id="q1">Is Rinux a Linux distribution?</dt>
+<dd>
+No. Rinux is a standalone kernel, not a distribution: it ships no userland, no
+package manager, no desktop. It is a <em>twin</em> of Linux in design &mdash; the same
+ideas, written from scratch in Rust.
+</dd>
+
+<dt id="q2">Why write a kernel in Rust instead of C?</dt>
+<dd>
+Rust gives memory safety checks at compile time without a garbage collector, which
+matters a lot in kernel space. It also makes low-level abstractions easier to reason
+about and harder to get wrong.
+</dd>
+
+<dt id="q3">Can I boot it on real hardware?</dt>
+<dd>
+Rinux boots via Multiboot2 and GRUB, so technically yes, but it is tested mainly in
+QEMU. While it is in active development, a virtual machine is the comfortable path.
+</dd>
+
+<dt id="q4">What does "monolithic modular" mean?</dt>
+<dd>
+The core subsystems run in kernel space (monolithic), but the source is organised in
+distinct components &mdash; memory management, allocator, console, drivers &mdash;
+each with a clear responsibility (modular).
+</dd>
+
+<dt id="q5">Which architectures are supported?</dt>
+<dd>
+Currently x86-64 (64-bit long mode). Other targets may come later, but nothing is
+promised.
+</dd>
+
+<dt id="q6">Is it ready to use?</dt>
+<dd>
+No. Rinux is in active development and is a learning/experimentation project. It
+boots, prints and manages memory &mdash; that is all, for now.
+</dd>
+
+<dt id="q7">Under which license is it released?</dt>
+<dd>
+GNU General Public License version 2.0. See the
+<a href="https://github.com/madebyanto/rinux/blob/main/LICENSE">LICENSE file</a>.
+</dd>
+
+<dt id="q8">I found a bug. Where do I report it?</dt>
+<dd>
+Open an <a href="https://github.com/madebyanto/rinux/issues">issue on GitHub</a>.
+Include your environment (QEMU version or hardware), the steps to reproduce, and the
+serial/screen output.
+</dd>
+
+</dl>
+
+<hr>
+
+<h2 id="resources">Useful resources</h2>
+
+<ul>
+  <li><a href="https://github.com/madebyanto/rinux">Source code</a> &mdash; the kernel itself</li>
+  <li><a href="https://github.com/madebyanto/rinux#readme">README</a> &mdash; project notes and build steps</li>
+  <li><a href="https://github.com/madebyanto/rinux/blob/main/LICENSE">LICENSE</a> &mdash; GNU GPL v2.0</li>
+  <li><a href="https://www.gnu.org/software/grub/manual/multiboot2/multiboot.html">Multiboot2 specification</a></li>
+  <li><a href="https://wiki.osdev.org/Main_Page">OSDev wiki</a></li>
+  <li><a href="https://os.phil-opp.com/">Writing an OS in Rust</a></li>
+  <li><a href="https://doc.rust-lang.org/reference/">The Rust Reference</a></li>
+  <li><a href="https://doc.rust-lang.org/nomicon/">The Rustonomicon</a> &mdash; unsafe Rust</li>
+  <li><a href="https://www.kernel.org/">kernel.org</a></li>
+  <li><a href="https://elixir.bootlin.com/linux/latest/source">Linux cross-referencer (Elixir)</a></li>
+</ul>
+
+<hr>
+
+<h2 id="contribute">Contribute</h2>
+
+<p>Rinux is in active development, and pull requests are welcome.</p>
+
+<ul>
+  <li>Write drivers, fix bugs, improve documentation.</li>
+  <li>Test it in QEMU and report what breaks.</li>
+  <li>Review pull requests and discuss design decisions.</li>
+  <li>Read the source and learn alongside the project.</li>
+</ul>
+
+<p>
+Fork the repository, create a branch, send a pull request with a clear description.
+Small focused patches are the ones that get merged.
+</p>
+
+<hr>
+
+<p class="small">
+Rinux &mdash; a handcrafted kernel.
+&nbsp;|&nbsp;
+<a href="#top">Back to top</a>
+&nbsp;|&nbsp;
+<a href="https://github.com/madebyanto/rinux">GitHub</a>
+&nbsp;|&nbsp;
+Free software under the GNU GPL v2.0.
+</p>
+
+<p class="small">
+Credits: the logo is a modified version of <a href="https://isc.tamu.edu/~lewing/linux/">Tux</a>,
+originally created by <b>Larry Ewing</b> with The GIMP: &ldquo;Permission to use and/or modify
+this image is granted provided you acknowledge me (Larry Ewing) and The GIMP if you use it
+to create a modified version.&rdquo; Rinux is not affiliated with them, nor with Linux.
+</p>
+
+<p class="small">
+Last updated: November 2026.
+</p>
+
+<script>
+  (function () {
+    var KEY = 'rinux-theme';
+    var root = document.documentElement;
+    var buttons = document.querySelectorAll('.theme-switch [data-theme-value]');
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+
+    function stored() {
+      try {
+        var t = localStorage.getItem(KEY);
+        return t === 'light' || t === 'dark' ? t : 'system';
+      } catch (e) {
+        return 'system';
+      }
+    }
+
+    function apply(mode) {
+      if (mode === 'system') {
+        root.removeAttribute('data-theme');
+      } else {
+        root.setAttribute('data-theme', mode);
+      }
+      for (var i = 0; i < buttons.length; i++) {
+        var on = buttons[i].getAttribute('data-theme-value') === mode;
+        buttons[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+      }
+    }
+
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].addEventListener('click', function () {
+        var mode = this.getAttribute('data-theme-value');
+        try {
+          if (mode === 'system') {
+            localStorage.removeItem(KEY);
+          } else {
+            localStorage.setItem(KEY, mode);
+          }
+        } catch (e) {}
+        apply(mode);
+      });
+    }
+
+    apply(stored());
+
+    var onChange = function () { if (stored() === 'system') apply('system'); };
+    if (mq.addEventListener) {
+      mq.addEventListener('change', onChange);
+    } else if (mq.addListener) {
+      mq.addListener(onChange);
+    }
+  })();
+</script>
+
+</body>
+</html>
