@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="How AI is used in the development of the Rinux kernel.">
+  <meta name="color-scheme" content="light dark">
+  <title>Rinux: About the use of AI</title>
+  <link rel="icon" type="image/png" href="Rinux.png">
+  <link rel="apple-touch-icon" href="Rinux.png">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('rinux-theme');
+        if (t === 'light' || t === 'dark') {
+          document.documentElement.setAttribute('data-theme', t);
+        }
+      } catch (e) { }
+    })();
+  </script>
+</head>
+
+<body>
+
+  <div class="theme-switch" role="group" aria-label="Color theme">
+    <button type="button" data-theme-value="light">Light</button>
+    <button type="button" data-theme-value="dark">Dark</button>
+    <button type="button" data-theme-value="system">System</button>
+  </div>
+
+  <div class="header">
+    <a class="logo" href="Rinux.png" title="Rinux logo">
+      <img src="Rinux.png" width="459" height="544"
+        alt="Rinux logo: a penguin wearing the Rust logo on its belly, a Unix-like twin of Tux. Original Linux Tux artwork by Larry Ewing, made with The GIMP.">
+    </a>
+    <div class="header-text">
+      <h1>Rinux</h1>
+      <p class="tagline">A Unix-like monolithic modular kernel written in Rust.</p>
+    </div>
+  </div>
+
+  <ul class="menu">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="https://github.com/madebyanto/rinux">GitHub</a></li>
+  </ul>
+
+  <hr>
+
+  <h2 id="top">About the use of AI</h2>
+
+  <p>
+    Hey everyone reading this! First off let me introduce myself: my name is Anto, Im 14
+    and I live in Italy. Ive been into computers and tech ever since I was 5 years old.
+    Right now I use Linux, specifically Arch Linux, which I've been running for almost
+    two years now, and also Debian. I started programming back in 2023, at first with
+    VBScript and Windows Forms, and then I expanded my knowledge into markup languages
+    like HTML and CSS. For the past few months I've been learning Rust and C, and I'm
+    actually managing to do some low-level stuff like writing two kernels, one of which
+    is called Rinux.
+  </p>
+
+  <p>
+    A couple of days ago I made a post on Reddit presenting the Rinux project in the
+    r/LinuxItalia subreddit, but all I got back were hateful, accusatory comments about
+    me using AI, some of them were genuinely inhumane and personal. This page exists
+    to explain how I use AI in Rinux and, more generally, in my open-source projects.
+  </p>
+
+  <h2 id="how">How AI is used</h2>
+
+  <p>
+    To put it briefly: yes, I use AI, but you need to understand what I actually mean by
+    that. I use AI to write complex parts of the code, to write commit descriptions
+    (since I struggle with English and don't really feel like writing commits by hand),
+    and to look for bugs. I can assure you that a lot of Rinux's code was written by me
+    with my current knowledge of Rust. On top of that, the idea and the direction of the
+    project are <b>always</b> guided by me.
+  </p>
+
+  <p>
+    Even though I use AI as a helper, Im always the one telling it what to do, what to
+    create or modify and within what limits. I always ask it for a plan of what it's
+    going to implement, and I examine that plan very carefully. And let's remember that
+    Im a solo maintainer.
+  </p>
+
+  <p>
+    I think AI is an incredibly useful tool, but it should <b>never</b> replace a human
+    being: there always needs to be human supervision over what AI does.
+  </p>
+
+  <h2 id="disclaimer">Disclaimer</h2>
+
+  <p>
+    Ive already added this line to the project's README, to avoid any misunderstandings
+    for those who care about things like this:
+  </p>
+
+  <pre><code>Disclaimer
+----------
+
+Rinux is developed with the help of AI.</code></pre>
+
+  <h2 id="closing">Final thoughts</h2>
+
+  <p>
+    Beyond all this, I personally think that whether a project is made with AI or not,
+    if it works and the creator knows what they're doing in a responsible way, then
+    there's no problem at all, and if you do have a problem with it, just skip it
+    instead of hurting another person. After all, Linux, KDE, GNOME, systemd and another
+    50,000 open-source projects use AI too.
+  </p>
+
+  <p>
+    Honestly Im a pretty friendly person and I dont want to be against anyone, so Im
+    sorry if this is creating so much confusion, it really made me feel awful. I hope
+    this page cleared things up. Thanks for reading!
+  </p>
+
+  <hr>
+
+  <p class="small">
+    Rinux
+    &nbsp;|&nbsp;
+    <a href="#top">Back to top</a>
+    &nbsp;|&nbsp;
+    <a href="index.html">Home</a>
+    &nbsp;|&nbsp;
+    <a href="https://github.com/madebyanto/rinux">GitHub</a>
+    &nbsp;|&nbsp;
+    Free software under the GNU GPL v2.0.
+  </p>
+
+  <script>
+    (function () {
+      var KEY = 'rinux-theme';
+      var root = document.documentElement;
+      var buttons = document.querySelectorAll('.theme-switch [data-theme-value]');
+      var mq = window.matchMedia('(prefers-color-scheme: dark)');
+
+      function stored() {
+        try {
+          var t = localStorage.getItem(KEY);
+          return t === 'light' || t === 'dark' ? t : 'system';
+        } catch (e) {
+          return 'system';
+        }
+      }
+
+      function apply(mode) {
+        if (mode === 'system') {
+          root.removeAttribute('data-theme');
+        } else {
+          root.setAttribute('data-theme', mode);
+        }
+        for (var i = 0; i < buttons.length; i++) {
+          var on = buttons[i].getAttribute('data-theme-value') === mode;
+          buttons[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+        }
+      }
+
+      for (var i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('click', function () {
+          var mode = this.getAttribute('data-theme-value');
+          try {
+            if (mode === 'system') {
+              localStorage.removeItem(KEY);
+            } else {
+              localStorage.setItem(KEY, mode);
+            }
+          } catch (e) { }
+          apply(mode);
+        });
+      }
+
+      apply(stored());
+
+      var onChange = function () { if (stored() === 'system') apply('system'); };
+      if (mq.addEventListener) {
+        mq.addEventListener('change', onChange);
+      } else if (mq.addListener) {
+        mq.addListener(onChange);
+      }
+    })();
+  </script>
+
+</body>
+
+</html>
